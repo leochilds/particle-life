@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# generated outputs (keep assets/preview.gif, which is committed on purpose)
+*.mp4
+/best.npy
+/best.seed
+/life.gif
+/out*.mp4

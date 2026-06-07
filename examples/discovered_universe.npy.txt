@@ -1,0 +1,19 @@
+This folder is for sharing universes you discover.
+
+A universe is fully described by its interaction matrix. Save one with:
+
+    python -m particle_life discover --species 5 --trials 40 --out examples/mylife.npy
+
+then render it any time with:
+
+    python -m particle_life render --matrix examples/mylife.npy --seconds 12 --out mylife.mp4
+
+The matrix below produced the cell-like organisms in assets/preview.gif
+(5 species; layout seed 837842349):
+
+        red    yellow  green   blue   purple
+red   [-0.04  -0.25    0.97    0.44    0.90 ]
+yellow[-0.76   0.70    0.27   -0.76    0.18 ]
+green [ 0.37  -0.98   -0.09    0.65   -0.41 ]
+blue  [-0.08  -0.12   -0.40    0.84    0.56 ]
+purple[-0.78   0.99    0.76   -0.43    0.67 ]
