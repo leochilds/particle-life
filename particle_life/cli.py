@@ -22,23 +22,44 @@ import numpy as np
 
 from .core import Config, Simulation
 from .core.discovery import discover
+from .progress import Progress
 from .render import render
 from .render.video import encode
 
 
+def _discovery_progress(label: str = "discovering"):
+    """Return an on_trial callback that drives a live progress bar."""
+    bar = Progress(0, label=label)  # total set on first call
+
+    def cb(i: int, total: int, result: dict, best: dict) -> None:
+        bar.total = max(1, total)
+        bar.update(suffix=f"best {best['score']:.3f}")
+
+    cb.bar = bar  # expose so the caller can finish it
+    return cb
+
+
 def _frames(sim: Simulation, n_frames: int, width: int, glow: int,
             substeps: int, settle: int):
+    bar = Progress(settle + n_frames, label="rendering")
     for _ in range(settle):
         sim.step()
+        bar.update(suffix="settling")
     for _ in range(n_frames):
         for _ in range(substeps):
             sim.step()
+        bar.update(suffix=f"{width}px")
         yield render(sim.pos, sim.species, sim.cfg.size, width=width, glow=glow)
+    bar.done()
 
 
 def cmd_discover(a: argparse.Namespace) -> int:
     cfg = Config(n_particles=a.particles, n_species=a.species)
-    results = discover(cfg, trials=a.trials, seed=a.seed)
+    print(f"searching {a.trials} random universes ({a.particles} particles, "
+          f"{a.species} species) ...")
+    cb = _discovery_progress()
+    results = discover(cfg, trials=a.trials, seed=a.seed, on_trial=cb)
+    cb.bar.done(suffix=f"best {results[0]['score']:.3f}")
     print(f"{'rank':>4}  {'score':>6}  {'clust':>5}  {'motion':>6}  {'hetero':>6}  seed")
     for i, r in enumerate(results[:10]):
         print(f"{i:>4}  {r['score']:>6.3f}  {r['clustering']:>5.2f}  "
@@ -56,8 +77,11 @@ def cmd_render(a: argparse.Namespace) -> int:
     seed = a.seed
     if a.discover:
         cfg = Config(n_particles=a.particles, n_species=a.species)
-        results = discover(cfg, trials=a.trials, seed=a.seed or 0)
+        print(f"searching {a.trials} random universes for an interesting one ...")
+        cb = _discovery_progress()
+        results = discover(cfg, trials=a.trials, seed=a.seed or 0, on_trial=cb)
         best = results[0]
+        cb.bar.done(suffix=f"best {best['score']:.3f}")
         matrix, seed = best["matrix"], best["seed"]
         print(f"discovered universe: score={best['score']:.3f} seed={seed}")
     elif a.matrix:

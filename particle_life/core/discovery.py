@@ -61,10 +61,15 @@ def score(sim: Simulation, settle: int = 250, measure: int = 60) -> dict:
     }
 
 
-def discover(cfg: Config, trials: int = 40, seed: int = 0) -> list[dict]:
-    """Sample `trials` random matrices, score each, return sorted best-first."""
+def discover(cfg: Config, trials: int = 40, seed: int = 0, on_trial=None) -> list[dict]:
+    """Sample `trials` random matrices, score each, return sorted best-first.
+
+    `on_trial(index, total, result, best_so_far)` is called after every trial,
+    letting callers report progress without this module knowing about the UI.
+    """
     rng = np.random.default_rng(seed)
     results = []
+    best = None
     for t in range(trials):
         m = make_matrix(cfg.n_species, rng)
         # fresh sim with its own layout seed but the candidate matrix
@@ -74,5 +79,9 @@ def discover(cfg: Config, trials: int = 40, seed: int = 0) -> list[dict]:
         s["matrix"] = m
         s["seed"] = c.seed
         results.append(s)
+        if best is None or s["score"] > best["score"]:
+            best = s
+        if on_trial is not None:
+            on_trial(t + 1, trials, s, best)
     results.sort(key=lambda d: d["score"], reverse=True)
     return results
