@@ -4,7 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>Particle Life — a living universe</title>
-<meta name="description" content="A continuously-running artificial-life universe. Lifelike structure emerges from a simple particle interaction matrix.">
+<meta name="description" content="A continuously-running artificial-life universe. Lifelike structure emerges from a simple particle interaction matrix. Drag to stir it.">
+<meta name="theme-color" content="#04060a">
+
+<!-- social share preview -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Particle Life — a living universe">
+<meta property="og:description" content="Lifelike structure emerging from a handful of numbers. Watch it live, stir it with your cursor, and spawn new universes.">
+<meta property="og:url" content="https://leochilds.github.io/particle-life/">
+<meta property="og:image" content="https://leochilds.github.io/particle-life/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Particle Life — a living universe">
+<meta name="twitter:description" content="Lifelike structure emerging from a handful of numbers. Watch it live and stir it with your cursor.">
+<meta name="twitter:image" content="https://leochilds.github.io/particle-life/og.png">
+
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -37,6 +52,7 @@
     <label class="toggle" title="Automatically replace universes once they go quiet">
       <input type="checkbox" id="chk-auto"><span>auto-replace</span>
     </label>
+    <button id="btn-about" class="icon" title="What is this?" aria-label="About">ⓘ</button>
   </nav>
 
   <!-- "gone quiet" prompt -->
@@ -57,8 +73,31 @@
     </div>
   </div>
 
+  <!-- about panel -->
+  <div id="about">
+    <div class="about-card">
+      <button id="about-close" aria-label="Close">×</button>
+      <h2>Particle Life</h2>
+      <p>Thousands of particles in a few colors drift on a wraparound world. Every
+      ordered pair of colors has a single number — how strongly one is attracted
+      to (or repelled by) the other. That little matrix is the <em>entire</em> rule.</p>
+      <p>No genomes, no networks, no goals. Yet what emerges looks alive: cells with
+      membranes, predators and prey, wandering organisms, structures that heal when
+      torn. The complexity lives in the interactions, not in any design.</p>
+      <p>Most random universes are dull, so the <strong>vitality</strong> meter scores
+      each one on clustering, motion and change. When a universe goes quiet you're
+      nudged to spawn a fresh one — or let auto-replace do it.</p>
+      <ul class="about-controls">
+        <li><strong>Drag</strong> the canvas to stir · <strong>right-drag / shift-drag</strong> to repel</li>
+        <li><kbd>space</kbd> pause · <kbd>n</kbd> new universe · <kbd>h</kbd> hide the UI</li>
+        <li><strong>Share</strong> copies a link that recreates the exact universe</li>
+      </ul>
+      <p class="about-foot">Open source · <a href="https://github.com/leochilds/particle-life" target="_blank" rel="noopener">github.com/leochilds/particle-life</a></p>
+    </div>
+  </div>
+
   <div id="toast"></div>
-  <div id="hint">press <kbd>h</kbd> to hide UI · <kbd>space</kbd> to pause · <kbd>n</kbd> for a new universe</div>
+  <div id="hint"><span class="stir-hint">drag to stir ·</span> <kbd>h</kbd> hide UI · <kbd>space</kbd> pause · <kbd>n</kbd> new universe</div>
 
   <script type="module" src="app.js"></script>
 </body>

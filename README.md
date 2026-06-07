@@ -7,8 +7,10 @@ An artificial-life sandbox where lifelike behavior emerges from almost nothing.
 ![preview](assets/preview.gif)
 
 The live page runs a universe continuously, shows a real-time **vitality** meter,
-notices when a universe has gone quiet, and can quick-search for a fresh lively
-one (with optional auto-replace). Any universe you love is shareable via its URL.
+and notices when a universe has gone quiet so it can quick-search for a fresh
+lively one (with optional auto-replace). **Drag the canvas to stir it** — tear a
+structure apart and watch it heal — right-drag (or shift-drag) to repel. Any
+universe you love is shareable via its URL.
 
 Scatter a few thousand particles of a handful of colors. Give every ordered pair
 of colors a single number — how much one is attracted to (or repelled by) the
@@ -147,11 +149,16 @@ that runs the whole thing client-side:
   grid, typed arrays), matching the Python force curve and integration so the
   look carries over. Runs ~2k particles at 60fps.
 - **`docs/app.js`** — Canvas rendering with additive glow sprites, the live
-  vitality meter, boredom detection, the best-of-N universe quick-search, and
-  URL-hash sharing.
+  vitality meter, boredom detection, the best-of-N universe quick-search,
+  pointer "stir" interaction, an About panel, and URL-hash sharing.
 
 It's plain ES modules with no build step, so opening `docs/index.html` from any
-static server just works. Keys: `space` pause, `n` new universe, `h` hide UI.
+static server just works (`npm run serve` does exactly that). Keys: `space`
+pause, `n` new universe, `h` hide UI. The JS engine has its own test suite:
+
+```bash
+npm test    # node --test over tests/*.test.mjs
+```
 
 ## Background
 

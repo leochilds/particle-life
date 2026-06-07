@@ -174,6 +174,29 @@ export class Simulation {
     }
   }
 
+  // External radial nudge (the pointer "stir"). `sign` > 0 repels from the
+  // point, < 0 attracts toward it; `swirl` adds a tangential whirl. Applied as
+  // a velocity impulse with a linear falloff to the radius, on the torus.
+  applyImpulse(wx, wy, radius, strength, sign, swirl = 0) {
+    const { px, py, vx, vy, n } = this;
+    const { width, height } = this.cfg;
+    const hw = width * 0.5, hh = height * 0.5;
+    const r2 = radius * radius;
+    for (let i = 0; i < n; i++) {
+      let ddx = px[i] - wx, ddy = py[i] - wy;
+      if (ddx > hw) ddx -= width; else if (ddx < -hw) ddx += width;
+      if (ddy > hh) ddy -= height; else if (ddy < -hh) ddy += height;
+      const d2 = ddx * ddx + ddy * ddy;
+      if (d2 < r2 && d2 > 1e-9) {
+        const dist = Math.sqrt(d2);
+        const falloff = 1 - dist / radius;
+        const nx = ddx / dist, ny = ddy / dist;
+        vx[i] += sign * nx * strength * falloff + (-ny) * swirl * falloff;
+        vy[i] += sign * ny * strength * falloff + (nx) * swirl * falloff;
+      }
+    }
+  }
+
   // -- live metrics for the vitality / boredom detector ----------------
   occupancy(binsX, binsY) {
     const occ = new Float32Array(binsX * binsY);

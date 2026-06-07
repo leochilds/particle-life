@@ -32,6 +32,10 @@ let frame = 0;
 let quietFrames = 0;            // consecutive frames below threshold
 let boring = false;
 
+// pointer "stir": x/y in world units, sign +1 repel / -1 attract
+const pointer = { active: false, x: 0, y: 0, sign: -1 };
+let stirredOnce = false;
+
 // global seeded RNG for matrix generation (re-seeded from time at boot)
 let rng = mulberry32(Date.now() & 0xffffffff);
 
@@ -219,6 +223,10 @@ function readHash() {
 // -- main loop --------------------------------------------------------------
 function loop() {
   if (sim && !paused && !searching) {
+    if (pointer.active) {
+      const radius = 0.16, strength = 0.05, swirl = 0.012;
+      sim.applyImpulse(pointer.x, pointer.y, radius, strength, pointer.sign, swirl);
+    }
     sim.step();
     updateVitality();
     frame++;
@@ -236,12 +244,59 @@ function wireUI() {
   const auto = document.getElementById('chk-auto');
   auto.onchange = () => { autoReplace = auto.checked; };
 
+  document.getElementById('btn-about').onclick = () => toggleAbout(true);
+  document.getElementById('about-close').onclick = () => toggleAbout(false);
+  document.getElementById('about').addEventListener('click', (e) => {
+    if (e.target.id === 'about') toggleAbout(false);   // click backdrop to close
+  });
+
   window.addEventListener('keydown', (e) => {
     if (e.code === 'Space') { e.preventDefault(); togglePause(); }
     else if (e.key === 'n') newUniverse(true);
     else if (e.key === 'h') document.body.classList.toggle('hide-ui');
+    else if (e.key === 'Escape') toggleAbout(false);
   });
   window.addEventListener('resize', resize);
+
+  wirePointer();
+}
+
+// Drag on the canvas to stir the universe. Primary button/touch attracts;
+// right-click or the Shift key repels. Tearing structures apart and watching
+// them heal is the whole idea made tactile.
+function wirePointer() {
+  const setFromEvent = (clientX, clientY) => {
+    pointer.x = clientX / scale;
+    pointer.y = clientY / scale;
+  };
+  const start = (e) => {
+    if (e.target.closest('#controls, #meter, #about, .quiet-card, #btn-about')) return;
+    pointer.active = true;
+    pointer.sign = (e.button === 2 || e.shiftKey) ? 1 : -1;
+    const t = e.touches ? e.touches[0] : e;
+    setFromEvent(t.clientX, t.clientY);
+    if (!stirredOnce) { stirredOnce = true; document.body.classList.add('stirred'); }
+    if (e.cancelable) e.preventDefault();
+  };
+  const move = (e) => {
+    if (!pointer.active) return;
+    const t = e.touches ? e.touches[0] : e;
+    setFromEvent(t.clientX, t.clientY);
+    if (e.cancelable) e.preventDefault();
+  };
+  const end = () => { pointer.active = false; };
+
+  canvas.addEventListener('mousedown', start);
+  window.addEventListener('mousemove', move);
+  window.addEventListener('mouseup', end);
+  canvas.addEventListener('touchstart', start, { passive: false });
+  window.addEventListener('touchmove', move, { passive: false });
+  window.addEventListener('touchend', end);
+  canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+}
+
+function toggleAbout(show) {
+  document.getElementById('about').classList.toggle('show', show);
 }
 
 function togglePause() {
