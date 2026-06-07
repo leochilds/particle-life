@@ -57,25 +57,46 @@ time watching life instead of soup.
 
 ## Install
 
-Needs Python 3.10+, `numpy`, `Pillow`, and `ffmpeg` on your PATH.
+Needs Python 3.10+. Everything else — including the `ffmpeg` used for encoding —
+is installed into a local virtual environment, so the project doesn't depend on
+what happens to be on the host.
 
 ```bash
-pip install -r requirements.txt   # numpy + Pillow
-# ffmpeg via your package manager, e.g.  sudo apt install ffmpeg
+./setup.sh                 # creates .venv and installs the package + ffmpeg
+source .venv/bin/activate  # then `particle-life ...` is on your PATH
 ```
+
+<details>
+<summary>Manual setup (equivalent)</summary>
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"    # or: pip install -r requirements.txt
+```
+</details>
+
+ffmpeg comes from the `imageio-ffmpeg` wheel as a bundled binary, so no system
+install is required. If you already have ffmpeg on your PATH, that one is used.
 
 ## Usage
 
+Once the environment is active you can use the `particle-life` command (or
+`python -m particle_life`, which is identical):
+
 ```bash
 # Hunt for an interesting universe; saves the winning matrix to best.npy
-python3 -m particle_life discover --species 5 --trials 30 --out best.npy
+particle-life discover --species 5 --trials 30 --out best.npy
 
 # Render a saved universe to an MP4 (or .gif by extension)
-python3 -m particle_life render --matrix best.npy --seconds 12 --out life.mp4
+particle-life render --matrix best.npy --seconds 12 --out life.mp4
 
 # Search and render the winner in one shot
-python3 -m particle_life render --discover --trials 30 --seconds 12 --out life.mp4
+particle-life render --discover --trials 30 --seconds 12 --out life.mp4
 ```
+
+Not into activating environments? Call the binary directly:
+`.venv/bin/particle-life render --discover --seconds 12 --out life.mp4`
 
 Useful knobs: `--particles`, `--species`, `--width`, `--glow`, `--fps`,
 `--substeps` (sim steps per rendered frame — raise it to speed up apparent

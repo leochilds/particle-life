@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "particle-life"
+version = "0.1.0"
+description = "An artificial-life sandbox where lifelike behavior emerges from a simple particle interaction matrix."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "Leo Childs" }]
+keywords = ["artificial-life", "emergence", "simulation", "particle-life", "complex-systems"]
+
+dependencies = [
+    "numpy>=1.24",
+    "Pillow>=9.0",
+    "imageio-ffmpeg>=0.4",  # bundles an ffmpeg binary so no system install is needed
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[project.scripts]
+particle-life = "particle_life.cli:main"
+
+[tool.setuptools]
+packages = ["particle_life", "particle_life.core", "particle_life.render"]

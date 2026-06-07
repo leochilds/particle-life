@@ -1,2 +1,5 @@
+# Runtime dependencies. For development install the package instead:
+#   pip install -e ".[dev]"
 numpy>=1.24
 Pillow>=9.0
+imageio-ffmpeg>=0.4   # bundled ffmpeg binary; no system ffmpeg required

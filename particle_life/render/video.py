@@ -16,10 +16,24 @@ from PIL import Image
 
 
 def _ffmpeg() -> str:
+    """Locate an ffmpeg binary.
+
+    Prefer one on PATH; otherwise fall back to the self-contained binary that
+    ships with the `imageio-ffmpeg` wheel, so a fresh `pip install` works even on
+    a host with no system ffmpeg.
+    """
     exe = shutil.which("ffmpeg")
-    if not exe:
-        raise RuntimeError("ffmpeg not found on PATH")
-    return exe
+    if exe:
+        return exe
+    try:
+        import imageio_ffmpeg
+        return imageio_ffmpeg.get_ffmpeg_exe()
+    except Exception:
+        pass
+    raise RuntimeError(
+        "ffmpeg not found. Install it via your package manager, or "
+        "`pip install imageio-ffmpeg` to use a bundled copy."
+    )
 
 
 def encode(frames: Iterator[Image.Image], out_path: str | Path, fps: int = 30) -> Path:
