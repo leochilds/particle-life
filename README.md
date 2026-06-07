@@ -2,7 +2,13 @@
 
 An artificial-life sandbox where lifelike behavior emerges from almost nothing.
 
+**▶ Live, full-screen, in your browser: https://leochilds.github.io/particle-life/**
+
 ![preview](assets/preview.gif)
+
+The live page runs a universe continuously, shows a real-time **vitality** meter,
+notices when a universe has gone quiet, and can quick-search for a fresh lively
+one (with optional auto-replace). Any universe you love is shareable via its URL.
 
 Scatter a few thousand particles of a handful of colors. Give every ordered pair
 of colors a single number — how much one is attracted to (or repelled by) the
@@ -131,6 +137,21 @@ tests/             invariants + a brute-force check that the grid search is exac
 The simulation is a torus, so there are no walls for particles to pile against.
 Neighbors are found with a uniform grid bucketed by cell; a test checks the grid
 search returns *exactly* the same pairs as an O(N²) brute-force reference.
+
+## Live web viewer
+
+The `docs/` folder is a dependency-free, static page (served via GitHub Pages)
+that runs the whole thing client-side:
+
+- **`docs/sim.js`** — the engine ported to JavaScript (linked-list spatial-hash
+  grid, typed arrays), matching the Python force curve and integration so the
+  look carries over. Runs ~2k particles at 60fps.
+- **`docs/app.js`** — Canvas rendering with additive glow sprites, the live
+  vitality meter, boredom detection, the best-of-N universe quick-search, and
+  URL-hash sharing.
+
+It's plain ES modules with no build step, so opening `docs/index.html` from any
+static server just works. Keys: `space` pause, `n` new universe, `h` hide UI.
 
 ## Background
 

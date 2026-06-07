@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Particle Life — a living universe</title>
+<meta name="description" content="A continuously-running artificial-life universe. Lifelike structure emerges from a simple particle interaction matrix.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="view"></canvas>
+
+  <!-- title -->
+  <header id="title">
+    <h1>PARTICLE&nbsp;LIFE</h1>
+    <p>life emerging from a handful of numbers</p>
+  </header>
+
+  <!-- vitality meter -->
+  <section id="meter" aria-label="vitality">
+    <div class="meter-head">
+      <span>VITALITY</span><span id="vital-num">0.50</span>
+    </div>
+    <div class="vital-track"><div id="vital-fill"></div></div>
+    <div class="submetrics">
+      <div><label>clustering</label><div class="track"><div id="bar-clu"></div></div></div>
+      <div><label>motion</label><div class="track"><div id="bar-mot"></div></div></div>
+      <div><label>change</label><div class="track"><div id="bar-het"></div></div></div>
+    </div>
+  </section>
+
+  <!-- controls -->
+  <nav id="controls">
+    <button id="btn-new" class="primary" title="Find a fresh lively universe (n)">✦ New universe</button>
+    <button id="btn-pause" title="Pause / play (space)">❚❚ Pause</button>
+    <button id="btn-share" title="Copy a shareable link to this universe">⤴ Share</button>
+    <label class="toggle" title="Automatically replace universes once they go quiet">
+      <input type="checkbox" id="chk-auto"><span>auto-replace</span>
+    </label>
+  </nav>
+
+  <!-- "gone quiet" prompt -->
+  <div id="quiet">
+    <div class="quiet-card">
+      <h2>This universe has gone quiet</h2>
+      <p>The structure has settled. Spin up a fresh one?</p>
+      <button id="quiet-new" class="primary">✦ New universe</button>
+    </div>
+  </div>
+
+  <!-- search overlay -->
+  <div id="search">
+    <div class="search-card">
+      <h2>Finding a lively universe…</h2>
+      <div class="search-track"><div id="search-bar"></div></div>
+      <p>best so far <span id="search-best">—</span></p>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+  <div id="hint">press <kbd>h</kbd> to hide UI · <kbd>space</kbd> to pause · <kbd>n</kbd> for a new universe</div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
