@@ -68,13 +68,13 @@ pip install -r requirements.txt   # numpy + Pillow
 
 ```bash
 # Hunt for an interesting universe; saves the winning matrix to best.npy
-python -m particle_life discover --species 5 --trials 30 --out best.npy
+python3 -m particle_life discover --species 5 --trials 30 --out best.npy
 
 # Render a saved universe to an MP4 (or .gif by extension)
-python -m particle_life render --matrix best.npy --seconds 12 --out life.mp4
+python3 -m particle_life render --matrix best.npy --seconds 12 --out life.mp4
 
 # Search and render the winner in one shot
-python -m particle_life render --discover --trials 30 --seconds 12 --out life.mp4
+python3 -m particle_life render --discover --trials 30 --seconds 12 --out life.mp4
 ```
 
 Useful knobs: `--particles`, `--species`, `--width`, `--glow`, `--fps`,

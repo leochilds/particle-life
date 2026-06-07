@@ -3,13 +3,13 @@
 Examples
 --------
   # Hunt for an interesting universe and save its matrix
-  python -m particle_life discover --species 5 --trials 30 --out best.npy
+  python3 -m particle_life discover --species 5 --trials 30 --out best.npy
 
   # Render a video from a saved matrix (or a fresh random one)
-  python -m particle_life render --matrix best.npy --seconds 12 --out life.mp4
+  python3 -m particle_life render --matrix best.npy --seconds 12 --out life.mp4
 
   # Render straight from a discovery search in one shot
-  python -m particle_life render --discover --trials 30 --seconds 12 --out life.mp4
+  python3 -m particle_life render --discover --trials 30 --seconds 12 --out life.mp4
 """
 
 from __future__ import annotations
